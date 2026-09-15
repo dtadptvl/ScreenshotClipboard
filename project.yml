@@ -11,7 +11,9 @@ targets:
       - ScreenshotClipboard
     dependencies:
       - target: ScreenshotClipboardBroadcast
+        embed: true
       - target: ScreenshotClipboardControl
+        embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard
@@ -33,6 +35,8 @@ targets:
         CODE_SIGNING_ALLOWED: NO
         CODE_SIGNING_REQUIRED: NO
         CODE_SIGN_ENTITLEMENTS: ScreenshotClipboardBroadcast/ScreenshotClipboardBroadcast.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
 
   ScreenshotClipboardControl:
@@ -47,4 +51,6 @@ targets:
         CODE_SIGNING_ALLOWED: NO
         CODE_SIGNING_REQUIRED: NO
         CODE_SIGN_ENTITLEMENTS: ScreenshotClipboardControl/ScreenshotClipboardControl.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
