@@ -2,36 +2,49 @@ name: ScreenshotClipboard
 options:
   bundleIdPrefix: com.dtadptvl
   deploymentTarget:
-    iOS: "27.0"
+    iOS: "18.0"
 targets:
   ScreenshotClipboard:
     type: application
     platform: iOS
     sources:
       - ScreenshotClipboard
+    dependencies:
+      - target: ScreenshotClipboardBroadcast
+      - target: ScreenshotClipboardControl
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard
         INFOPLIST_FILE: ScreenshotClipboard/Info.plist
         CODE_SIGNING_ALLOWED: NO
         CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_ENTITLEMENTS: ScreenshotClipboard/ScreenshotClipboard.entitlements
         GENERATE_INFOPLIST_FILE: NO
+
+  ScreenshotClipboardBroadcast:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ScreenshotClipboardBroadcast
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard.Broadcast
+        INFOPLIST_FILE: ScreenshotClipboardBroadcast/Info.plist
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_ENTITLEMENTS: ScreenshotClipboardBroadcast/ScreenshotClipboardBroadcast.entitlements
+        SKIP_INSTALL: YES
+
   ScreenshotClipboardControl:
     type: app-extension
     platform: iOS
     sources:
       - ScreenshotClipboardControl
-    dependencies:
-      - target: ScreenshotClipboard
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard.Control
         INFOPLIST_FILE: ScreenshotClipboardControl/Info.plist
         CODE_SIGNING_ALLOWED: NO
         CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_ENTITLEMENTS: ScreenshotClipboardControl/ScreenshotClipboardControl.entitlements
         SKIP_INSTALL: YES
-    info:
-      path: ScreenshotClipboardControl/Info.plist
-      properties:
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.widgetkit-extension
