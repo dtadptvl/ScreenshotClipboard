@@ -5,14 +5,21 @@ import UIKit
 
 struct CopyScreenIntent: AppIntent {
     static var title: LocalizedStringResource = "Copy Screen"
-    static var description = IntentDescription("Copy the current captured screen to the clipboard.")
+    static var description = IntentDescription("Copy the latest ReplayKit screen frame to the clipboard.")
     static var openAppWhenRun = false
 
-    func perform() async throws -> some IntentResult {
-        // The extension cannot safely reach the app's in-memory SCStream.
-        // v0.1 exposes the control and validates Action Button launch latency.
-        // A shared capture transport is required before this can copy the app's live frame.
-        return .result()
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        let group = "group.com.dtadptvl.ScreenshotClipboard"
+        guard let url = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: group)?
+            .appendingPathComponent("latest.jpg"),
+              let data = try? Data(contentsOf: url),
+              let image = UIImage(data: data) else {
+            return .result(dialog: "No captured frame yet")
+        }
+
+        UIPasteboard.general.image = image
+        return .result(dialog: "Copied")
     }
 }
 
@@ -24,7 +31,7 @@ struct ScreenshotClipboardControl: ControlWidget {
             }
         }
         .displayName("Copy Screen")
-        .description("Copy the current full-screen capture to the clipboard.")
+        .description("Copy the latest full-screen ReplayKit frame to the clipboard.")
     }
 }
 
