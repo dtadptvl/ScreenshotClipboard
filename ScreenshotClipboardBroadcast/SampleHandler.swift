@@ -1,6 +1,7 @@
 import ReplayKit
 import CoreImage
 import UIKit
+import QuartzCore
 
 final class SampleHandler: RPBroadcastSampleHandler {
     private let context = CIContext(options: [.cacheIntermediates: false])
@@ -46,17 +47,13 @@ final class SampleHandler: RPBroadcastSampleHandler {
             guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
             let image = UIImage(cgImage: cgImage)
             guard let data = image.jpegData(compressionQuality: 0.96) else { return }
-            let tempURL = frameURL.appendingPathExtension("tmp")
+
             do {
-                try data.write(to: tempURL, options: .atomic)
-                _ = try? FileManager.default.replaceItemAt(frameURL, withItemAt: tempURL)
-                if !FileManager.default.fileExists(atPath: frameURL.path) {
-                    try? FileManager.default.moveItem(at: tempURL, to: frameURL)
-                }
+                try data.write(to: frameURL, options: .atomic)
                 let defaults = UserDefaults(suiteName: "group.com.dtadptvl.ScreenshotClipboard")
                 defaults?.set(Date().timeIntervalSince1970, forKey: "latestFrameTime")
             } catch {
-                try? FileManager.default.removeItem(at: tempURL)
+                // Drop this frame; the next video sample will retry.
             }
         }
     }
