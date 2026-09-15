@@ -40,10 +40,9 @@ final class SampleHandler: RPBroadcastSampleHandler {
         guard now - lastWrite >= minInterval else { return }
         lastWrite = now
 
-        CVPixelBufferRetain(pixelBuffer)
-        queue.async { [context] in
-            defer { CVPixelBufferRelease(pixelBuffer) }
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let capturedPixelBuffer = pixelBuffer
+        queue.async { [context, capturedPixelBuffer] in
+            let ciImage = CIImage(cvPixelBuffer: capturedPixelBuffer)
             guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
             let image = UIImage(cgImage: cgImage)
             guard let data = image.jpegData(compressionQuality: 0.96) else { return }
