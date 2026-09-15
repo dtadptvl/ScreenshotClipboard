@@ -1,0 +1,37 @@
+name: ScreenshotClipboard
+options:
+  bundleIdPrefix: com.dtadptvl
+  deploymentTarget:
+    iOS: "27.0"
+targets:
+  ScreenshotClipboard:
+    type: application
+    platform: iOS
+    sources:
+      - ScreenshotClipboard
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard
+        INFOPLIST_FILE: ScreenshotClipboard/Info.plist
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        GENERATE_INFOPLIST_FILE: NO
+  ScreenshotClipboardControl:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ScreenshotClipboardControl
+    dependencies:
+      - target: ScreenshotClipboard
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dtadptvl.ScreenshotClipboard.Control
+        INFOPLIST_FILE: ScreenshotClipboardControl/Info.plist
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        SKIP_INSTALL: YES
+    info:
+      path: ScreenshotClipboardControl/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
